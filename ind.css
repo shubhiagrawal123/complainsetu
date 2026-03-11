@@ -1,0 +1,156 @@
+body{
+font-family: Arial, sans-serif;
+background:#f0f3f8;
+margin:0;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 40px;
+background:#1e5db6;
+color:white;
+}
+
+.navbar ul{
+display:flex;
+list-style:none;
+gap:30px;
+}
+
+.navbar li{
+cursor:pointer;
+}
+
+.login{
+background:#ff7a00;
+padding:8px 15px;
+border-radius:5px;
+}
+
+/* GRID LAYOUT */
+
+.container{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+padding:30px;
+}
+
+/* HERO */
+
+.hero{
+background:linear-gradient(135deg,#2d6cdf,#4b8df7);
+color:white;
+padding:30px;
+border-radius:10px;
+}
+
+.hero-buttons{
+margin-top:20px;
+}
+
+.primary{
+background:#ff7a00;
+border:none;
+padding:10px 20px;
+color:white;
+margin-right:10px;
+border-radius:5px;
+}
+
+.secondary{
+background:white;
+color:#2d6cdf;
+border:none;
+padding:10px 20px;
+border-radius:5px;
+}
+
+/* CATEGORIES */
+
+.categories{
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+.category-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-top:15px;
+}
+
+.card{
+background:#f3f6fb;
+padding:20px;
+text-align:center;
+border-radius:8px;
+font-weight:bold;
+
+}
+#div1:hover{
+    border:solid black 2px;
+    background-color: lightcyan;
+}
+
+/* REGISTER FORM */
+
+.register{
+background:white;
+padding:20px;
+border-radius:10px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.register input,
+.register select,
+.register textarea{
+padding:8px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+.submit{
+margin-top:10px;
+background:#ff7a00;
+border:none;
+padding:12px;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+/* TRACK */
+
+.track{
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+.status{
+margin-top:15px;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+#li1:hover{
+    color:aqua;
+}
+#li2:hover{
+    border:solid black 2px;
+}
+#button:hover{
+    border:solid black 2px;
+    
+}
+button{
+    margin:2px;
+}
