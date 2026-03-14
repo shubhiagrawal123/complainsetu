@@ -1,5 +1,17 @@
 import React, { useState } from "react";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+function LocationMarker({ setCoords }) {
+    const [position, setPosition] = useState(null);
 
+    useMapEvents({
+        click(e) {
+            setPosition(e.latlng);
+            setCoords({ lat: e.latlng.lat, lng: e.latlng.lng });
+        },
+    });
+
+    return position ? <Marker position={position} /> : null;
+}
 const RegisterComplaint = () => {
     const [category, setCategory] = useState("");
     const [location, setLocation] = useState("");
@@ -18,10 +30,37 @@ const RegisterComplaint = () => {
         }
 
         navigator.geolocation.getCurrentPosition(
-            (position) => {
+            async (position) => {
                 const { latitude, longitude } = position.coords;
                 setCoords({ lat: latitude, lng: longitude });
-                setLocation(`Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`);
+
+                try {
+                    // Reverse geocoding API
+                    const res = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+                    );
+                    const data = await res.json();
+
+                    const area =
+                        data.address.suburb ||
+                        data.address.village ||
+                        data.address.town ||
+                        data.address.city ||
+                        "";
+
+                    const city =
+                        data.address.city ||
+                        data.address.state_district ||
+                        data.address.state ||
+                        "";
+
+                    const locationName = `${area}, ${city}`;
+
+                    setLocation(locationName);
+                } catch (err) {
+                    console.error(err);
+                    setLocation(`Lat: ${latitude}, Lng: ${longitude}`);
+                }
             },
             (error) => {
                 console.error(error);
@@ -31,26 +70,34 @@ const RegisterComplaint = () => {
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
 
+        const formData = new FormData();
+
+        formData.append("category", category);
+        formData.append("location", location);
+        formData.append("details", details);
+        formData.append("file", file);
+
         try {
+
             const res = await fetch("http://localhost:5000/api/complaints", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ category, location, details }),
+                body: formData
             });
 
             const data = await res.json();
+
             alert(data.message);
 
-            // Form reset
-            setCategory("");
-            setLocation("");
-            setDetails("");
-        } catch (err) {
-            console.error(err);
-            alert("Failed to submit complaint");
+        } catch (error) {
+
+            console.error(error);
+            alert("Error submitting complaint");
+
         }
+
     };
 
     return (
@@ -184,21 +231,41 @@ const RegisterComplaint = () => {
                                     {/* File input with separate button */}
                                     <input
                                         type="file"
-                                        accept=".png,.jpg,.jpeg,.mp4"
-                                        onChange={(e) => setFile(e.target.files[0])}
+                                        accept="image/png,image/jpeg,video/mp4"
                                         className="mt-2"
                                         id="file-upload"
+                                        onChange={(e) => {
+                                            const selectedFile = e.target.files[0];
+                                            setFile(selectedFile);
+                                        }}
                                     />
+                                    {file && (
+                                        <p className="text-sm text-green-600 mt-1">
+                                            Selected: {file.name}
+                                        </p>
+                                    )}
                                     
                                 </div>
                             </div>
                             <div>
                                 <label className="text-sm font-semibold">Pin on Map</label>
-                                <div className="mt-2 h-40 bg-slate-200 rounded-lg flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-red-600 text-4xl">
-                                        location_on
-                                    </span>
-                                </div>
+
+                                <MapContainer
+                                    center={coords.lat ? [coords.lat, coords.lng] : [23.2599, 77.4126]}
+                                    zoom={13}
+                                    style={{ height: "200px", width: "100%" }}
+                                >
+                                    <TileLayer
+                                        attribution="&copy; OpenStreetMap contributors"
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+
+                                    {coords.lat && (
+                                        <Marker position={[coords.lat, coords.lng]} />
+                                    )}
+
+                                </MapContainer>
+
                             </div>
 
                             {/* Buttons */}
