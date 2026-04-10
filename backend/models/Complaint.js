@@ -1,18 +1,20 @@
 const mongoose = require("mongoose");
 
-const ComplaintSchema = new mongoose.Schema({
+const complaintSchema = new mongoose.Schema({
+
     category: String,
     location: String,
-    description: String,
+    details: String,
     image: String,
+    coordinates: {
+        lat: Number,
+        lng: Number
+    },
     status: {
         type: String,
         default: "Pending"
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
-});
 
-module.exports = mongoose.model("Complaint", ComplaintSchema);
+}, { timestamps: true });
+
+module.exports = mongoose.model("Complaint", complaintSchema);

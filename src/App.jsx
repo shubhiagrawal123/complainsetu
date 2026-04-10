@@ -1,41 +1,60 @@
-import React, { useState } from 'react';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-import Home from './screens/Home';
-import Dashboard from './screens/Dashboard';
-import TrackComplaint from './screens/TrackComplaint';
-import RegisterComplaint from './screens/RegisterComplaint';
+import Home from "./screens/Home";
+import Dashboard from "./screens/Dashboard";
+import RegisterComplaint from "./screens/RegisterComplaint";
+import TrackComplaint from "./screens/TrackComplaint";
+import AdminDashboard from "./screens/AdminDashboard";
+import Helpline from "./screens/Helpline";
+import Login from "./screens/login";
+
+
 
 const App = () => {
-
-  const [currentPath, setCurrentPath] = useState('home');
-
-  const handleNavigate = (path) => {
-    setCurrentPath(path);
-    window.scrollTo(0, 0);
-  };
-
-  const renderPage = () => {
-    switch (currentPath) {
-
-      case 'dashboard':
-        return <Dashboard onNavigate={handleNavigate} />;
-
-      case 'register':
-        return <RegisterComplaint onNavigate={handleNavigate} />;
-
-      case 'track':
-        return <TrackComplaint onNavigate={handleNavigate} />;
-
-      case 'home':
-      default:
-        return <Home onNavigate={handleNavigate} />;
-    }
-  };
-
   return (
-    <main className="min-h-screen bg-white">
-      {renderPage()}
-    </main>
+    <AuthProvider>
+      <BrowserRouter>
+        <main className="min-h-screen bg-white">
+          <Routes>
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={
+              <ProtectedRoute>
+                <RegisterComplaint />
+              </ProtectedRoute>
+            } />
+            <Route path="/track/:id" element={
+              <ProtectedRoute>
+                <TrackComplaint />
+              </ProtectedRoute>
+            } />
+            <Route path="/helpline" element={
+              <ProtectedRoute>
+                <Helpline />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/admin" element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </main>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 

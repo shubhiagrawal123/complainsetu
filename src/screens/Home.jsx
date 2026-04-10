@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import {
     Gavel, ShieldCheck, FileText, Search, Shield,
     Ambulance, Heart, Baby, PhoneCall, ArrowRight
@@ -10,7 +11,7 @@ const Home = ({ onNavigate = () => { } }) => {
     useEffect(() => {
         document.title = 'Complaint Setu - Quick & Efficient Redressal';
     }, []);
-
+    const navigate = useNavigate(); 
     return (
         <>
 
@@ -25,23 +26,27 @@ const Home = ({ onNavigate = () => { } }) => {
                         </div>
                         <nav className="flex items-center gap-8 bg-white ">
                             <a className="font-medium text-primary hover:text-primary/80" href="#" onClick={(e) => { e.preventDefault(); onNavigate('home'); }}>Home</a>
-                            <a className="font-medium text-slate-700 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#" onClick={(e) => { e.preventDefault(); onNavigate('track'); }}>Track Complaint</a>
-                            <a className="font-medium text-slate-700 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#" onClick={(e) => { e.preventDefault(); onNavigate('dashboard'); }}>Helpline Info</a>
-                            <a className="font-medium text-slate-700 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#" onClick={(e) => { e.preventDefault(); onNavigate('dashboard'); }}>Contact Us</a>
+                            <a className="font-medium text-slate-700 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/track/:id'); }}>Track Complaint</a>
+                            <a className="font-medium text-slate-700 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/helpline'); }}>Helpline Info</a>
+                            <a className="font-medium text-slate-700 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/contact'); }}>Contact Us</a>
 
                         </nav>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3">
                             <button onClick={() => setMobileOpen((value) => !value)} className="md:hidden p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
                                 <span className="material-icons">{mobileOpen ? 'close' : 'menu'}</span>
                             </button>
-                            <button className="bg-blue-700 text-white px-5 py-2 rounded-lg hover:bg-blue-800 transition">
+
+                            <button className="bg-white text-primary border border-primary px-4 py-2 rounded-lg hover:bg-primary/10 transition" onClick={() => navigate('/admin')}>
+                                Admin Dashboard
+                            </button>
+                            <button className="bg-blue-700 text-white px-5 py-2 rounded-lg hover:bg-blue-800 transition" onClick={() => navigate('/login')}>
                                 Login
                             </button>
                         </div>
                         <div className={`${mobileOpen ? 'flex' : 'hidden'} absolute top-full left-0 right-0 bg-white dark:bg-background-dark border-t border-primary/10 p-4 md:hidden z-20`}>
                             <nav className="flex flex-col gap-3">
                                 <a className="font-medium text-primary hover:text-primary/80" href="#" onClick={(e) => { e.preventDefault(); setMobileOpen(false); onNavigate('home'); }}>Home</a>
-                                <a className="font-medium text-slate-600 dark:text-slate-400 hover:text-primary" href="#" onClick={(e) => { e.preventDefault(); setMobileOpen(false); onNavigate('track'); }}>Track Complaint</a>
+                                <a className="font-medium text-slate-600 dark:text-slate-400 hover:text-primary" href="#" onClick={(e) => { e.preventDefault(); setMobileOpen(false); navigate('/track/:id'); }}>Track Complaint</a>
                                 <a className="font-medium text-slate-600 dark:text-slate-400 hover:text-primary" href="#" onClick={(e) => { e.preventDefault(); setMobileOpen(false); onNavigate('dashboard'); }}>Helpline Info</a>
                                 <a className="font-medium text-slate-600 dark:text-slate-400 hover:text-primary" href="#" onClick={(e) => { e.preventDefault(); setMobileOpen(false); onNavigate('dashboard'); }}>Contact Us</a>
                                 <a
@@ -82,7 +87,7 @@ const Home = ({ onNavigate = () => { } }) => {
                                     <div className="flex gap-4">
 
                                         <button
-                                            onClick={() => onNavigate('register')}
+                                            onClick={() => navigate("/register")}
                                             className="px-8 py-4 bg-blue-700 text-white font-semibold rounded-xl shadow-md hover:bg-blue-800 transition flex items-center gap-2"
                                         >
                                             <span className="material-icons text-sm">edit</span>
@@ -90,7 +95,7 @@ const Home = ({ onNavigate = () => { } }) => {
                                         </button>
 
                                         <button
-                                            onClick={() => onNavigate('track')}
+                                            onClick={() => navigate("/track/69b5ccdd4011abecbbcfb92e")}
                                             className="px-8 py-4 border border-blue-200 text-blue-700 font-semibold rounded-xl hover:bg-blue-50 transition flex items-center gap-2"
                                         >
                                             <span className="material-icons text-sm">search</span>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
+
 function LocationMarker({ setCoords }) {
     const [position, setPosition] = useState(null);
 
@@ -13,6 +15,7 @@ function LocationMarker({ setCoords }) {
     return position ? <Marker position={position} /> : null;
 }
 const RegisterComplaint = () => {
+    const navigate = useNavigate();
     const [category, setCategory] = useState("");
     const [location, setLocation] = useState("");
     const [details, setDetails] = useState("");
@@ -79,6 +82,8 @@ const RegisterComplaint = () => {
         formData.append("location", location);
         formData.append("details", details);
         formData.append("file", file);
+        formData.append("lat", coords.lat);
+        formData.append("lng", coords.lng);
 
         try {
 
@@ -90,6 +95,10 @@ const RegisterComplaint = () => {
             const data = await res.json();
 
             alert(data.message);
+
+            if (data.complaintId) {
+                navigate(`/track/${data.complaintId}`);
+            }
 
         } catch (error) {
 
@@ -244,7 +253,7 @@ const RegisterComplaint = () => {
                                             Selected: {file.name}
                                         </p>
                                     )}
-                                    
+
                                 </div>
                             </div>
                             <div>
